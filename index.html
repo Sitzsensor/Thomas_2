@@ -1,0 +1,273 @@
+  <!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sitzsensor Web BLE Thomas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.js"></script>
+  <script src="https://unpkg.com/p5ble@0.0.5/dist/p5.ble.js"></script>
+ 
+  <style>
+    .pain1 {
+    position: absolute;
+    left: 100px;
+    top: 110px;
+    background: red;
+    border-radius: 50%;
+    margin: 20px;
+    height: 12px;
+    width: 12px;
+    box-shadow: 0 0 0 0 rgb(199, 102, 102);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+  }
+
+  .pain2 {
+    position: absolute;
+    left: 67px;
+    top: 170px;
+    background: red;
+    border-radius: 50%;
+    margin: 20px;
+    height: 12px;
+    width: 12px;
+    box-shadow: 0 0 0 0 rgb(199, 102, 102);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+  }
+
+  .pain3 {
+    position: absolute;
+    left: 155px;
+    top: 200px;
+    background: red;
+    border-radius: 50%;
+    margin: 20px;
+    height: 12px;
+    width: 12px;
+    box-shadow: 0 0 0 0 rgb(199, 102, 102);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(0.9);
+      box-shadow: 0 0 0 0 rgba(226, 134, 134, 0.8);
+    }
+  
+    70% {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 12px rgba(235, 19, 19, 0);
+    }
+  
+    100% {
+      transform: scale(0.9);
+      box-shadow: 0 0 0 0 rgba(160, 84, 84, 0);
+    }
+  }
+   </style>
+
+</head>
+
+<body>
+  <h2 style="text-align: left">Sitzsensor Web BLE Thomas</h2>
+  <canvas id="myCanvas" width="320" height="480" style="border:1px solid #000000;">
+  Your browser does not support the HTML canvas tag.
+  </canvas>
+
+  <script>
+      // Create the static elements
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      //Hintergrund
+      ctx.fillStyle = 'ghostwhite';
+      ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+      ctx.font = "20px Arial";
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = "2";
+      ctx.fillText("AcY = ", 190, 470);
+      ctx.beginPath();
+      ctx.rect(10, 10, 230, 220);
+
+      //Buttons for seat type
+      ctx.fillRect(250, 10, 50, 40);
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(250, 60, 50, 40);
+      ctx.fillStyle = 'black';
+      ctx.fillRect(250, 110, 50, 40);
+      ctx.font = "18px Arial";
+      ctx.fillStyle = "white";
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = "2";
+      ctx.fillText("Seat", 255, 35);
+      ctx.fillText("Stool", 255, 85);
+      ctx.fillText("Ball", 255, 135);
+
+      //buttons time frame
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(30, 430, 50, 20);
+      ctx.fillStyle = 'black';
+      ctx.fillRect(90, 430, 50, 20);
+      ctx.fillRect(150, 430, 50, 20);
+      ctx.fillRect(210, 430, 50, 20);
+
+      ctx.font = "12px Arial";
+      ctx.fillStyle = "white";
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = "2";
+      ctx.fillText("1 hr", 40, 445);
+      ctx.fillText("4 hrs", 100, 445);
+      ctx.fillText("1 day", 160, 445);
+      ctx.fillText("1 week", 215, 445);
+
+      //Frames around images
+      ctx.rect(10, 250, 50, 100);
+      ctx.rect(70, 250, 50, 100);
+      ctx.rect(130, 250, 50, 100);
+      ctx.rect(190, 250, 50, 100);
+      ctx.rect(250, 250, 50, 100);
+      //X-Axis
+      ctx.moveTo(10, 420);
+      ctx.lineTo(300, 420);
+      //Y Axis
+      ctx.moveTo(10, 420);
+      ctx.lineTo(10, 360);
+      //Skala
+      ctx.moveTo(5, 410);
+      ctx.lineTo(10, 410);
+      ctx.moveTo(5, 400);
+      ctx.lineTo(10, 400);
+      ctx.moveTo(5, 390);
+      ctx.lineTo(10, 390);
+      ctx.moveTo(5, 380);
+      ctx.lineTo(10, 380);
+      ctx.moveTo(5, 370);
+      ctx.lineTo(10, 370);
+      
+      ctx.stroke();
+      //future dynamic elements
+      ctx.fillStyle = 'red';
+      ctx.fillRect(20, 320 + 50, 30, 50);
+      ctx.fillStyle = 'green';
+      ctx.fillRect(80, 320 + 60, 30, 40);
+      ctx.fillRect(140, 320 + 80, 30, 20);
+      ctx.fillRect(200, 320 + 70, 30, 30);
+      ctx.fillRect(260, 320 + 80, 30, 20);
+
+    
+  </script>
+
+  <script>
+    window.onload = function() {
+      let img1 = new Image();
+      img1.src = 'Krumm.png';
+      let img2 = new Image();
+      img2.src = 'Aufrecht.png';
+      let img3 = new Image();
+      img3.src = 'Sitzsteh.png';
+      let img4 = new Image();
+      img4.src = 'Stehen.png';
+      let img5 = new Image();
+      img5.src = 'Laufen.png';
+      let x1, y1, b1, h1;
+
+      img1.onload = function() {
+        draw_image(img1, -20, 250, 100, 100);
+        draw_image(img1, 10, 10, 210, 210);
+      }
+      img2.onload = function() {
+        draw_image(img2, 40, 250, 100, 100);
+      }
+      img3.onload = function() {
+        draw_image(img3, 115, 250, 100, 100);
+      }
+      img4.onload = function() {
+        draw_image(img4, 175, 250, 100, 100);
+      }
+      img5.onload = function() {
+        draw_image(img5, 225, 250, 100, 100);
+      }
+
+      function draw_image(img, x1, y1, b1, h1) {
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.drawImage(img, x1, y1, b1, h1);
+        
+      }
+      
+    }
+  </script>
+
+  <script>
+    //Bluetooth
+    const serviceUuid = "19b10000-e8f2-537e-4f6c-d104768a1214";
+    let myCharacteristic;
+    let myValue = 0;
+    let AcY = 0;
+    let AcYold = 0;
+    let myBLE;
+
+    function setup() {
+      // Create a p5ble class
+      myBLE = new p5ble();
+      // Create a 'Connect' button
+      const connectButton = createButton('Connect')
+      connectButton.mousePressed(connectToBle);
+    }
+
+    setInterval(update_AcY, 10);
+
+    function update_AcY() {
+      // Create the dynamic rectangles
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.font = "20px Arial";
+      ctx.fillStyle = 'white';
+      ctx.fillText(AcYold, 250,470);
+      ctx.fillStyle = 'black';
+      ctx.fillText(AcY, 250, 470);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(AcYold + 9, 353, 53, 5);
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(AcY + 10, 353, 50, 5);
+
+      AcYold = AcY;
+    }
+
+    function connectToBle() {
+      // Connect to a device by passing the service UUID
+      myBLE.connect(serviceUuid, gotCharacteristics);
+    }
+
+    // A function that will be called once got characteristics
+    function gotCharacteristics(error, characteristics) {
+      if (error) console.log('error: ', error);
+      console.log('characteristics: ', characteristics);
+      myCharacteristic = characteristics[0];
+      // Read the value of the first characteristic
+      myBLE.read(myCharacteristic, 'string', gotValue);
+    }
+
+    // A function that will be called once got values
+    function gotValue(error, value) {
+      if (error) console.log('error: ', error);
+      //console.log('value: ', value);
+      myValue = value;
+      var acceleration = myValue.split('|');
+      AcY = acceleration[1];
+      // After getting a value, call p5ble.read() again to get the value again
+      myBLE.read(myCharacteristic, 'string', gotValue);
+    }
+
+  </script>
+
+	<div class="pain1">  </div>
+  <div class="pain2">  </div>
+  <div class="pain3">  </div>
+
+</body>
+
+</html>
